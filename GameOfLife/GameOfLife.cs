@@ -18,7 +18,6 @@ namespace GameOfLife
         public void NextGeneration()
         {
             var cells = Grid.Cells.ToHashSet();
-
             var newCells = new List<Cell>();
 
             for (var x = 0; x < Grid.Size.X; x++)
@@ -35,7 +34,7 @@ namespace GameOfLife
                         {
                             if (cells.Contains(new Cell(new Coordinates(i, j))))
                             {
-                                if (i == 0 && j == 0)
+                                if (i == coordinates.X && j == coordinates.Y)
                                 {
                                     alive = true;
                                 }
