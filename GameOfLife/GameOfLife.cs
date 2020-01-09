@@ -20,26 +20,22 @@ namespace GameOfLife
             var cells = Grid.Cells.ToHashSet();
             var newCells = new List<Cell>();
 
-            foreach (var coordinates in Grid.GetAllCoordinatesByRow())
+            foreach (var coordinates in Grid.GetAllCoordinatesByRow(Grid.Size))
             {
                 var count = 0;
                 var alive = false;
 
-                for (var i = Math.Max(coordinates.X - 1, 0); i <= Math.Min(coordinates.X + 1, Grid.Size.X - 1); i++)
+                foreach (var neighbour in Grid.GetAllCoordinatesByRow(new Coordinates(3, 3), new Coordinates(coordinates.X - 1, coordinates.Y - 1)))
                 {
-                    for (var j = Math.Max(coordinates.Y - 1, 0); j <= Math.Min(coordinates.Y + 1, Grid.Size.Y - 1); j++)
+                    if (!cells.Contains(new Cell(neighbour))) continue;
+
+                    if (neighbour.X == coordinates.X && neighbour.Y == coordinates.Y)
                     {
-                        if (cells.Contains(new Cell(new Coordinates(i, j))))
-                        {
-                            if (i == coordinates.X && j == coordinates.Y)
-                            {
-                                alive = true;
-                            }
-                            else
-                            {
-                                count++;
-                            }
-                        }
+                        alive = true;
+                    }
+                    else
+                    {
+                        count++;
                     }
                 }
 
@@ -57,7 +53,7 @@ namespace GameOfLife
             var sb = new StringBuilder();
             var cells = Grid.Cells.ToHashSet();
 
-            foreach (var coordinates in Grid.GetAllCoordinatesByRow())
+            foreach (var coordinates in Grid.GetAllCoordinatesByRow(Grid.Size))
             {
                 sb.Append((cells.Contains(new Cell(coordinates)) ? "X" : " ") + (coordinates.X == Grid.Size.X - 1 ? Environment.NewLine : string.Empty));
             }

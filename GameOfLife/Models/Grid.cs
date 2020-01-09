@@ -16,9 +16,9 @@ namespace GameOfLife.Models
 
         public ReadOnlyCollection<Cell> Cells { get; set; }
 
-        public IEnumerable<Coordinates> GetAllCoordinatesByRow()
+        public static IEnumerable<Coordinates> GetAllCoordinatesByRow(Coordinates size, Coordinates offset = default)
         {
-            return Enumerable.Range(0, Size.Y).SelectMany(y => Enumerable.Range(0, Size.X).Select(x => new Coordinates(x, y)));
+            return Enumerable.Range(0, size.Y).SelectMany(y => Enumerable.Range(0, size.X).Select(x => new Coordinates(x + offset.X, y + offset.Y)));
         }
     }
 }
