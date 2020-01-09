@@ -28,9 +28,9 @@ namespace GameOfLife
                     var alive = false;
                     var coordinates = new Coordinates(x, y);
 
-                    for (var i = coordinates.X - 1; i <= coordinates.X + 1; i++)
+                    for (var i = Math.Max(coordinates.X - 1, 0); i <= Math.Min(coordinates.X + 1, Grid.Size.X - 1); i++)
                     {
-                        for (var j = coordinates.Y - 1; j <= coordinates.Y + 1; j++)
+                        for (var j = Math.Max(coordinates.Y - 1, 0); j <= Math.Min(coordinates.Y + 1, Grid.Size.Y - 1); j++)
                         {
                             if (cells.Contains(new Cell(new Coordinates(i, j))))
                             {
