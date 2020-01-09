@@ -14,15 +14,14 @@ namespace GameOfLife
                 new Coordinates(2, 3)
             });
 
-            ConsoleKeyInfo key;
             do
             {
                 Console.Clear();
                 Console.WriteLine(gameOfLife.Render());
                 Console.WriteLine("Press Enter to go to next generation...");
+
                 gameOfLife.NextGeneration();
-                key = Console.ReadKey();
-            } while (key.Key == ConsoleKey.Enter);
+            } while (Console.ReadKey().Key == ConsoleKey.Enter);
         }
     }
 }

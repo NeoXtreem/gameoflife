@@ -12,7 +12,7 @@ namespace GameOfLife
 
         public GameOfLife(Coordinates size, IEnumerable<Coordinates> aliveCells)
         {
-            Grid = new Grid(size, aliveCells.Select(c => new Cell(new Coordinates(c.X, c.Y))));
+            Grid = new Grid(size, aliveCells.Select(c => new Cell(c)));
         }
 
         public void NextGeneration()
@@ -20,36 +20,32 @@ namespace GameOfLife
             var cells = Grid.Cells.ToHashSet();
             var newCells = new List<Cell>();
 
-            for (var x = 0; x < Grid.Size.X; x++)
+            foreach (var coordinates in Grid.GetAllCoordinatesByRow())
             {
-                for (var y = 0; y < Grid.Size.Y; y++)
-                {
-                    var count = 0;
-                    var alive = false;
-                    var coordinates = new Coordinates(x, y);
+                var count = 0;
+                var alive = false;
 
-                    for (var i = Math.Max(coordinates.X - 1, 0); i <= Math.Min(coordinates.X + 1, Grid.Size.X - 1); i++)
+                for (var i = Math.Max(coordinates.X - 1, 0); i <= Math.Min(coordinates.X + 1, Grid.Size.X - 1); i++)
+                {
+                    for (var j = Math.Max(coordinates.Y - 1, 0); j <= Math.Min(coordinates.Y + 1, Grid.Size.Y - 1); j++)
                     {
-                        for (var j = Math.Max(coordinates.Y - 1, 0); j <= Math.Min(coordinates.Y + 1, Grid.Size.Y - 1); j++)
+                        if (cells.Contains(new Cell(new Coordinates(i, j))))
                         {
-                            if (cells.Contains(new Cell(new Coordinates(i, j))))
+                            if (i == coordinates.X && j == coordinates.Y)
                             {
-                                if (i == coordinates.X && j == coordinates.Y)
-                                {
-                                    alive = true;
-                                }
-                                else
-                                {
-                                    count++;
-                                }
+                                alive = true;
+                            }
+                            else
+                            {
+                                count++;
                             }
                         }
                     }
+                }
 
-                    if (alive ? count != 1 && (count == 2 || count == 3) : count == 3)
-                    {
-                        newCells.Add(new Cell(coordinates));
-                    }
+                if (alive ? count != 1 && (count == 2 || count == 3) : count == 3)
+                {
+                    newCells.Add(new Cell(coordinates));
                 }
             }
 
@@ -61,14 +57,9 @@ namespace GameOfLife
             var sb = new StringBuilder();
             var cells = Grid.Cells.ToHashSet();
 
-            for (var x = 0; x < Grid.Size.X; x++)
+            foreach (var coordinates in Grid.GetAllCoordinatesByRow())
             {
-                for (var y = 0; y < Grid.Size.Y; y++)
-                {
-                    sb.Append(cells.Contains(new Cell(new Coordinates(x, y)) ) ? "X" : " ");
-                }
-
-                sb.Append(Environment.NewLine);
+                sb.Append((cells.Contains(new Cell(coordinates)) ? "X" : " ") + (coordinates.X == Grid.Size.X - 1 ? Environment.NewLine : string.Empty));
             }
 
             return sb.ToString();
